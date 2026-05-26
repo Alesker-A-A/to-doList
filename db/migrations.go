@@ -9,6 +9,9 @@ func CreateTables(db *sql.DB) error {
     description TEXT,
     priority    INTEGER DEFAULT 1,
     deadline    TEXT,
+    start_time  TEXT,
+    end_time    TEXT,
+    color       TEXT,
     done        INTEGER DEFAULT 0,
     created_at  TEXT DEFAULT CURRENT_TIMESTAMP
 )`

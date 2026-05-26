@@ -12,6 +12,9 @@ type CreateTaskRequest struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	Priority    int    `json:"priority"`
+	StartTime   string `json:"start_time"`
+	EndTime     string `json:"end_time"`
+	Color       string `json:"color"`
 	Deadline    string `json:"deadline"`
 }
 
@@ -19,6 +22,9 @@ type UpdateTaskRequest struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	Priority    int    `json:"priority"`
+	StartTime   string `json:"start_time"`
+	EndTime     string `json:"end_time"`
+	Color       string `json:"color"`
 	Deadline    string `json:"deadline"`
 	Done        bool   `json:"done"`
 }

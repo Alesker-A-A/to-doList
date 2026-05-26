@@ -19,6 +19,7 @@ func main() {
 	}
 
 	h := handlers.Handler{DB: conn}
+	http.Handle("/", http.FileServer(http.Dir("static")))
 	http.HandleFunc("GET /tasks", h.GetTasks)
 	http.HandleFunc("POST /tasks", h.CreateTask)
 	http.HandleFunc("PUT /tasks/{id}", h.UpdateTask)
