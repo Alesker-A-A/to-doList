@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Calendar — задачи и календарь в одном месте</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="landing.css">
+</head>
+<body class="landing-body">
+    <header class="landing-header">
+        <div class="brand">
+            <span class="brand-mark"></span>
+            <span class="brand-name">Task Calendar</span>
+        </div>
+        <a href="/app" class="cta-link">Открыть календарь</a>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-content">
+                <p class="eyebrow">Планировщик задач</p>
+                <h1 class="hero-title">
+                    Меньше забытого,<br>
+                    <em>больше</em> сделанного.
+                </h1>
+                <p class="hero-sub">
+                    Лёгкий календарь с недельной сеткой, приоритетами и дедлайнами.
+                    Сделан, чтобы перестать держать всё в голове.
+                </p>
+                <div class="hero-actions">
+                    <a href="/app" class="cta-primary">Открыть календарь</a>
+                    <a href="#about" class="cta-ghost">Узнать больше</a>
+                </div>
+            </div>
+
+            <!-- Декоративная мини-сетка справа -->
+            <div class="hero-visual" aria-hidden="true">
+                <div class="mock-grid">
+                    <div class="mock-row"><span>09</span><div class="mock-block mock-block-3" style="left: 25%; width: 22%;"></div></div>
+                    <div class="mock-row"><span>10</span><div class="mock-block mock-block-2" style="left: 50%; width: 40%;"></div></div>
+                    <div class="mock-row"><span>11</span><div class="mock-block mock-block-2" style="left: 50%; width: 40%; top: -28px;"></div></div>
+                    <div class="mock-row"><span>12</span></div>
+                    <div class="mock-row"><span>13</span><div class="mock-block mock-block-1" style="left: 12%; width: 30%;"></div></div>
+                    <div class="mock-row"><span>14</span><div class="mock-block mock-block-3" style="left: 70%; width: 22%;"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- История -->
+        <section class="story" id="about">
+            <p class="section-eyebrow">Почему Я это сделал</p>
+            <div class="story-text">
+                <p>
+                    Я сделал Task Calendar потому что у меня плохая память на задачи. Записывал на бумажке и терял, договаривался о чём-то и забывал, держал в голове и в нужный момент там оказывалось пусто.
+                </p>
+                <p>
+                    Хотелось одно место где всё видно сразу. Чтобы на неделю вперёд, с конкретным временем и без лишнего. Сделал для себя, может пригодится и тебе.
+                </p>
+                <p class="signature">Алескер</p>
+            </div>
+        </section>
+
+        <!-- Фичи -->
+        <section class="features">
+            <p class="section-eyebrow">— что умеет</p>
+            <h2 class="section-title">Простой, но достаточно гибкий</h2>
+
+            <div class="features-grid">
+                <div class="feature">
+                    <div class="feature-num">01</div>
+                    <h3>Недельная сетка с часами</h3>
+                    <p>Видишь всю неделю сразу и ставишь задачи на конкретный час. Кликнул на свободное место в расписании и задача уже там, с нужным временем.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-num">02</div>
+                    <h3>Три уровня приоритета</h3>
+                    <p>Низкий, средний, высокий. Цветная полоска слева подсказывает что важнее, не загромождая интерфейс.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-num">03</div>
+                    <h3>Гибкие сроки</h3>
+                    <p>Привяжи задачу к конкретному часу, ко всему дню, или оставь её бессрочной для того, что хочется сделать "когда-нибудь".</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-num">04</div>
+                    <h3>Описания, которые не теряются</h3>
+                    <p>Открываешь задачу и видишь всё что записал. Детали, контекст, напоминалки себе. Больше не надо вспоминать что имел в виду.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section class="final-cta">
+            <h2>Готов попробовать?</h2>
+            <p>Никакой регистрации, никаких уведомлений. Просто календарь.</p>
+            <a href="/app" class="cta-primary cta-large">Открыть календарь →</a>
+        </section>
+    </main>
+
+    <footer class="landing-footer">
+        <div class="footer-inner">
+            <div>
+                <span class="brand-mark"></span>
+                <span class="brand-name">Task Calendar</span>
+            </div>
+            <p>Pet-проект на Go · А. А. А. · 2026</p>
+        </div>
+    </footer>
+</body>
+</html>

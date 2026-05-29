@@ -34,7 +34,7 @@ type Handler struct {
 }
 
 func (h *Handler) GetTasks(w http.ResponseWriter, r *http.Request) {
-	rows, err := h.DB.Query(`SELECT id, title, description, priority, deadline, done, created_at FROM tasks`)
+	rows, err := h.DB.Query(`SELECT id, title, description, priority, start_time, end_time, color, deadline, done, created_at FROM tasks`)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -44,7 +44,7 @@ func (h *Handler) GetTasks(w http.ResponseWriter, r *http.Request) {
 	var tasks []models.Task
 	for rows.Next() {
 		var t models.Task
-		err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.Priority, &t.Deadline, &t.Done, &t.CreatedAt)
+		err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.Priority, &t.StartTime, &t.EndTime, &t.Color, &t.Deadline, &t.Done, &t.CreatedAt)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -63,8 +63,8 @@ func (h *Handler) CreateTask(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	_, err = h.DB.Exec(`INSERT INTO tasks (title, description, priority, deadline) VALUES (?, ?, ?, ?)`,
-		req.Title, req.Description, req.Priority, req.Deadline)
+	_, err = h.DB.Exec(`INSERT INTO tasks (title, description, priority, start_time, end_time, color, deadline) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+		req.Title, req.Description, req.Priority, req.StartTime, req.EndTime, req.Color, req.Deadline)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -86,8 +86,8 @@ func (h *Handler) UpdateTask(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	_, err = h.DB.Exec(`UPDATE tasks SET title=?, description=?, priority=?, deadline=?, done=? WHERE id=?`,
-		req.Title, req.Description, req.Priority, req.Deadline, req.Done, taskID)
+	_, err = h.DB.Exec(`UPDATE tasks SET title=?, description=?, priority=?, start_time=?, end_time=?, color=?, deadline=?, done=? WHERE id=?`,
+		req.Title, req.Description, req.Priority, req.StartTime, req.EndTime, req.Color, req.Deadline, req.Done, taskID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
