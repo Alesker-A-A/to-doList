@@ -1,0 +1,154 @@
+.stats-layout {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+}
+
+.stats-heading {
+    font-family: "Fraunces", Georgia, serif;
+    font-size: 2rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    margin-bottom: 32px;
+}
+
+/* ---------- Карточки-числа ---------- */
+.stat-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 36px;
+}
+
+@media (max-width: 640px) {
+    .stat-cards { grid-template-columns: repeat(2, 1fr); }
+    .stats-layout { padding: 28px 20px 60px; }
+}
+
+.stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    box-shadow: var(--shadow);
+}
+.stat-card.accent { border-color: var(--accent); background: var(--accent-soft); }
+.stat-card.warn   { border-color: var(--high);   background: #f9eeec; }
+
+.stat-value {
+    font-family: "Fraunces", Georgia, serif;
+    font-size: 2.2rem;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.02em;
+}
+.stat-card.accent .stat-value { color: var(--accent); }
+.stat-card.warn   .stat-value { color: var(--high); }
+
+.stat-label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+/* ---------- Секции ---------- */
+.stat-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+}
+
+.stat-section-title {
+    font-family: "Fraunces", Georgia, serif;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 16px;
+    letter-spacing: -0.005em;
+}
+
+/* ---------- Прогресс ---------- */
+.progress-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.progress-bar-track {
+    flex: 1;
+    height: 10px;
+    background: var(--surface-2);
+    border-radius: 99px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 99px;
+    width: 0%;
+    transition: width 0.5s ease;
+}
+
+.progress-pct {
+    font-family: "Fraunces", Georgia, serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--accent);
+    min-width: 42px;
+    text-align: right;
+}
+
+/* ---------- По приоритетам ---------- */
+.priority-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.priority-row {
+    display: grid;
+    grid-template-columns: 72px 1fr 36px;
+    align-items: center;
+    gap: 12px;
+}
+
+.priority-row-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.priority-track {
+    height: 8px;
+    background: var(--surface-2);
+    border-radius: 99px;
+    overflow: hidden;
+}
+
+.priority-fill {
+    height: 100%;
+    border-radius: 99px;
+    width: 0%;
+    transition: width 0.5s ease;
+}
+.priority-fill.low    { background: var(--low); }
+.priority-fill.medium { background: var(--medium); }
+.priority-fill.high   { background: var(--high); }
+
+.priority-count {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-align: right;
+}
+
+/* ---------- Заметка ---------- */
+.stat-note {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}

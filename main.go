@@ -28,6 +28,14 @@ func main() {
 		http.ServeFile(w, r, "static/app.html")
 	})
 
+	http.HandleFunc("GET /stats", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "static/stats.html")
+	})
+
+	http.HandleFunc("GET /archive", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "static/archive.html")
+	})
+
 	// API
 	http.HandleFunc("GET /tasks", h.GetTasks)
 	http.HandleFunc("POST /tasks", h.CreateTask)

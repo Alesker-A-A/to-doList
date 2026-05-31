@@ -1,0 +1,111 @@
+.archive-layout {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+}
+
+.archive-header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 32px;
+}
+
+.archive-heading {
+    font-family: "Fraunces", Georgia, serif;
+    font-size: 2rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+}
+
+.archive-count {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* ---------- Пустое состояние ---------- */
+.archive-empty {
+    color: var(--text-faint);
+    font-size: 0.95rem;
+    text-align: center;
+    padding: 60px 0;
+}
+.hidden { display: none; }
+
+/* ---------- Группы ---------- */
+.archive-group {
+    margin-bottom: 28px;
+}
+
+.archive-group-title {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-faint);
+    margin-bottom: 8px;
+    padding-left: 2px;
+}
+
+/* ---------- Задачи ---------- */
+.archive-task {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    margin-bottom: 6px;
+    box-shadow: var(--shadow);
+    opacity: 0.75;
+}
+
+.archive-task.priority-1 { border-left-color: var(--low); }
+.archive-task.priority-2 { border-left-color: var(--medium); }
+.archive-task.priority-3 { border-left-color: var(--high); }
+
+.archive-task-check {
+    color: var(--accent);
+    font-size: 1rem;
+    margin-top: 1px;
+    flex-shrink: 0;
+}
+
+.archive-task-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.archive-task-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: line-through;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.archive-task-meta {
+    font-size: 0.75rem;
+    color: var(--text-faint);
+    margin-top: 3px;
+}
+
+.archive-task-delete {
+    background: none;
+    border: none;
+    color: var(--text-faint);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0 2px;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: color 0.12s;
+}
+.archive-task-delete:hover { color: var(--high); }
+
+@media (max-width: 640px) {
+    .archive-layout { padding: 28px 20px 60px; }
+}

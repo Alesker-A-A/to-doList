@@ -10,13 +10,6 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header class="topbar">
-        <div class="brand">
-            <span class="brand-mark"></span>
-            <span class="brand-name">Task Calendar</span>
-        </div>
-        <button class="btn-today" id="todayBtn">Сегодня</button>
-    </header>
 
     <div class="layout">
         <aside class="sidebar">
@@ -84,6 +77,40 @@
         </main>
     </div>
 
+    <!-- Модалка редактирования -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Редактировать задачу</h3>
+                <button class="modal-close" id="modalClose" title="Закрыть">×</button>
+            </div>
+            <form class="modal-form" id="modalForm">
+                <input type="text" id="modalTitleInput" placeholder="Название" required autocomplete="off">
+                <input type="text" id="modalDesc" placeholder="Описание (необязательно)" autocomplete="off">
+                <div class="form-row">
+                    <input type="date" id="modalDeadline" title="Дата">
+                    <select id="modalPriority" title="Приоритет">
+                        <option value="1">Низкий</option>
+                        <option value="2">Средний</option>
+                        <option value="3">Высокий</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <input type="time" id="modalStart" title="Начало">
+                    <input type="time" id="modalEnd" title="Конец">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-danger" id="modalDelete">Удалить</button>
+                    <div class="modal-actions-right">
+                        <button type="button" class="btn-secondary" id="modalToggleDone"></button>
+                        <button type="submit" class="btn-primary">Сохранить</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="navbar.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Архив — Task Calendar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="archive.css">
+</head>
+<body>
+    <div class="archive-layout">
+        <div class="archive-header">
+            <h1 class="archive-heading">Архив</h1>
+            <span class="archive-count" id="archiveCount"></span>
+        </div>
+
+        <div id="archiveEmpty" class="archive-empty hidden">
+            Нет выполненных задач
+        </div>
+
+        <div id="archiveList"></div>
+    </div>
+
+    <script src="navbar.js"></script>
+    <script src="archive.js"></script>
+</body>
+</html>

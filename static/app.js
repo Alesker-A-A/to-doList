@@ -1,7 +1,7 @@
 // ============== Константы ==============
 const API = "/tasks";
-const GRID_START = 8;     // сетка начинается с 8:00
-const GRID_HOURS = 14;    // показываем 14 часов (8:00 – 22:00)
+const GRID_START = 8;
+const GRID_HOURS = 14;
 
 const WEEKDAY_NAMES = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
 const MONTH_NAMES = [
@@ -15,15 +15,15 @@ const MONTH_GENITIVE = [
 
 // ============== Состояние ==============
 let allTasks = [];
-let weekStart = mondayOf(new Date());     // понедельник текущей видимой недели
-let miniMonth = new Date(weekStart);      // месяц в мини-календаре
+let weekStart = mondayOf(new Date());
+let miniMonth = new Date(weekStart);
 let currentFilter = "all";
 
 // ============== Хелперы дат ==============
 function mondayOf(date) {
     const d = new Date(date);
     d.setHours(0, 0, 0, 0);
-    const day = d.getDay(); // 0=вс
+    const day = d.getDay();
     const diff = day === 0 ? -6 : 1 - day;
     d.setDate(d.getDate() + diff);
     return d;
@@ -108,10 +108,10 @@ function renderWeekGrid() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // --- Шапка с днями ---
+    // Шапка с днями
     const headerRow = document.createElement("div");
     headerRow.className = "day-header-row";
-    headerRow.appendChild(document.createElement("div")); // пустой угол
+    headerRow.appendChild(document.createElement("div"));
 
     for (let i = 0; i < 7; i++) {
         const date = addDays(weekStart, i);
@@ -126,7 +126,7 @@ function renderWeekGrid() {
     }
     grid.appendChild(headerRow);
 
-    // --- Строка "Весь день" (задачи с датой, но без времени) ---
+    // Строка "Весь день"
     const alldayRow = document.createElement("div");
     alldayRow.className = "allday-row";
 
@@ -152,18 +152,17 @@ function renderWeekGrid() {
             if (task.color) el.style.background = task.color;
             el.textContent = task.title;
             el.title = task.title;
-            el.addEventListener("click", () => toggleDone(task));
+            el.addEventListener("click", () => openModal(task));
             cell.appendChild(el);
         }
         alldayRow.appendChild(cell);
     }
     grid.appendChild(alldayRow);
 
-    // --- Основная сетка по часам ---
+    // Основная сетка по часам
     const timeGrid = document.createElement("div");
     timeGrid.className = "time-grid";
 
-    // Колонка с подписями часов
     const timeCol = document.createElement("div");
     timeCol.className = "time-col";
     for (let h = GRID_START; h < GRID_START + GRID_HOURS; h++) {
@@ -174,7 +173,6 @@ function renderWeekGrid() {
     }
     timeGrid.appendChild(timeCol);
 
-    // Колонки дней
     for (let i = 0; i < 7; i++) {
         const date = addDays(weekStart, i);
         const ymd = formatYMD(date);
@@ -182,7 +180,6 @@ function renderWeekGrid() {
         col.className = "day-col";
         if (sameDay(date, today)) col.classList.add("today");
 
-        // Линии часов
         for (let h = 1; h < GRID_HOURS; h++) {
             const line = document.createElement("div");
             line.className = "hour-line";
@@ -190,7 +187,6 @@ function renderWeekGrid() {
             col.appendChild(line);
         }
 
-        // Задачи с временем на этот день
         const dayTasks = allTasks.filter(t =>
             passesFilter(t)
             && t.deadline === ymd
@@ -202,7 +198,6 @@ function renderWeekGrid() {
             const [eh, em] = task.end_time.split(":").map(Number);
             const startMin = (sh - GRID_START) * 60 + sm;
             const endMin = (eh - GRID_START) * 60 + em;
-            // Обрезаем по границам сетки
             const maxMin = GRID_HOURS * 60;
             if (endMin <= 0 || startMin >= maxMin) continue;
             const top = Math.max(0, startMin);
@@ -224,7 +219,7 @@ function renderWeekGrid() {
                 e.stopPropagation();
                 deleteTask(task.id);
             });
-            block.addEventListener("click", () => toggleDone(task));
+            block.addEventListener("click", () => openModal(task));
 
             col.appendChild(block);
         }
@@ -251,7 +246,6 @@ function renderMiniCal() {
         allTasks.filter(t => t.deadline).map(t => t.deadline)
     );
 
-    // Всегда 6 недель = 42 ячейки для постоянной высоты
     for (let i = 0; i < 42; i++) {
         const date = addDays(start, i);
         const btn = document.createElement("button");
@@ -289,6 +283,8 @@ function renderGlobalList() {
         `;
         el.querySelector(".global-task-checkbox").addEventListener("change", () => toggleDone(task));
         el.querySelector(".global-task-delete").addEventListener("click", () => deleteTask(task.id));
+        // Клик по тексту открывает модалку
+        el.querySelector(".global-task-title").addEventListener("click", () => openModal(task));
         list.appendChild(el);
     }
 }
@@ -314,6 +310,83 @@ function escapeHtml(str) {
     return div.innerHTML;
 }
 
+// ============== Модалка ==============
+let modalTaskId = null;
+
+const overlay   = document.getElementById("modalOverlay");
+const modalForm = document.getElementById("modalForm");
+
+function openModal(task) {
+    modalTaskId = task.id;
+
+    document.getElementById("modalTitleInput").value = task.title || "";
+    document.getElementById("modalDesc").value        = task.description || "";
+    document.getElementById("modalDeadline").value    = task.deadline || "";
+    document.getElementById("modalPriority").value    = task.priority || 2;
+    document.getElementById("modalStart").value       = task.start_time || "";
+    document.getElementById("modalEnd").value         = task.end_time || "";
+
+    const toggleBtn = document.getElementById("modalToggleDone");
+    toggleBtn.textContent = task.done ? "Вернуть в работу" : "Выполнено";
+    toggleBtn.classList.toggle("done-active", task.done);
+
+    overlay.classList.add("open");
+    document.getElementById("modalTitleInput").focus();
+}
+
+function closeModal() {
+    overlay.classList.remove("open");
+    modalTaskId = null;
+}
+
+// Закрытие по кнопке × и по клику на фон
+document.getElementById("modalClose").addEventListener("click", closeModal);
+overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) closeModal();
+});
+
+// Закрытие по Escape
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeModal();
+});
+
+// Сохранить
+modalForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (modalTaskId === null) return;
+
+    const task = allTasks.find(t => t.id === modalTaskId);
+    if (!task) return;
+
+    updateTask(modalTaskId, {
+        title:       document.getElementById("modalTitleInput").value.trim(),
+        description: document.getElementById("modalDesc").value.trim(),
+        priority:    Number(document.getElementById("modalPriority").value),
+        deadline:    document.getElementById("modalDeadline").value,
+        start_time:  document.getElementById("modalStart").value,
+        end_time:    document.getElementById("modalEnd").value,
+        color:       task.color,
+        done:        task.done
+    });
+    closeModal();
+});
+
+// Удалить
+document.getElementById("modalDelete").addEventListener("click", () => {
+    if (modalTaskId === null) return;
+    deleteTask(modalTaskId);
+    closeModal();
+});
+
+// Выполнено / Вернуть в работу
+document.getElementById("modalToggleDone").addEventListener("click", () => {
+    if (modalTaskId === null) return;
+    const task = allTasks.find(t => t.id === modalTaskId);
+    if (!task) return;
+    toggleDone(task);
+    closeModal();
+});
+
 // ============== Обработчики ==============
 document.getElementById("addForm").addEventListener("submit", (e) => {
     e.preventDefault();
@@ -322,11 +395,11 @@ document.getElementById("addForm").addEventListener("submit", (e) => {
     const payload = {
         title,
         description: document.getElementById("description").value.trim(),
-        priority: Number(document.getElementById("priority").value),
-        deadline: document.getElementById("deadline").value,
-        start_time: document.getElementById("startTime").value,
-        end_time: document.getElementById("endTime").value,
-        color: ""
+        priority:    Number(document.getElementById("priority").value),
+        deadline:    document.getElementById("deadline").value,
+        start_time:  document.getElementById("startTime").value,
+        end_time:    document.getElementById("endTime").value,
+        color:       ""
     };
     createTask(payload);
     e.target.reset();
@@ -341,7 +414,7 @@ document.getElementById("nextWeek").addEventListener("click", () => {
     weekStart = addDays(weekStart, 7);
     renderAll();
 });
-document.getElementById("todayBtn").addEventListener("click", () => {
+window.addEventListener("navbar:today", () => {
     weekStart = mondayOf(new Date());
     miniMonth = new Date(weekStart);
     renderAll();
