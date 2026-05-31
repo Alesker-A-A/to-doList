@@ -101,6 +101,91 @@ function renderWeekHeader() {
     document.getElementById("weekLabel").textContent = label;
 }
 
+// Раскладка задач одного дня по колонкам, чтобы пересекающиеся
+// по времени задачи делили ширину, а не накладывались друг на друга.
+//
+// Возвращает массив объектов: { task, top, height, colIndex, colCount }.
+//   colIndex — в какую колонку попала задача (0-based)
+//   colCount — сколько всего колонок в её кластере
+function computeDayLayout(dayTasks, maxMin) {
+    // 1. Считаем геометрию (top/height в минутах от начала сетки)
+    //    и сразу отсеиваем задачи, целиком выходящие за пределы сетки.
+    const items = [];
+    for (const task of dayTasks) {
+        const [sh, sm] = task.start_time.split(":").map(Number);
+        const [eh, em] = task.end_time.split(":").map(Number);
+        const startMin = (sh - GRID_START) * 60 + sm;
+        const endMin = (eh - GRID_START) * 60 + em;
+        if (endMin <= 0 || startMin >= maxMin) continue;
+
+        const top = Math.max(0, startMin);
+        const height = Math.max(22, Math.min(maxMin, endMin) - top);
+
+        items.push({
+            task,
+            top,
+            height,
+            // границы для проверки пересечения берём по реальному времени,
+            // а не по обрезанному, чтобы раскладка была корректной
+            start: startMin,
+            end: endMin,
+            colIndex: 0,
+            colCount: 1,
+        });
+    }
+
+    // 2. Сортируем по времени начала (при равенстве — по концу).
+    items.sort((a, b) => a.start - b.start || a.end - b.end);
+
+    // 3. Идём по задачам, накапливая "кластер" взаимно пересекающихся.
+    //    Когда встречаем задачу, не пересекающуюся ни с чем в кластере,
+    //    закрываем текущий кластер и начинаем новый.
+    let cluster = [];
+    let clusterEnd = -1; // максимальный end среди задач кластера
+
+    function flushCluster() {
+        if (cluster.length === 0) return;
+        // Раскладываем задачи кластера по колонкам жадно:
+        // каждая задача идёт в первую колонку, где она не пересекается
+        // с последней задачей в этой колонке.
+        const columns = []; // columns[i] = end последней задачи в колонке i
+        for (const item of cluster) {
+            let placed = false;
+            for (let c = 0; c < columns.length; c++) {
+                if (item.start >= columns[c]) {
+                    item.colIndex = c;
+                    columns[c] = item.end;
+                    placed = true;
+                    break;
+                }
+            }
+            if (!placed) {
+                item.colIndex = columns.length;
+                columns.push(item.end);
+            }
+        }
+        // Все задачи кластера получают одинаковое число колонок
+        const colCount = columns.length;
+        for (const item of cluster) {
+            item.colCount = colCount;
+        }
+        cluster = [];
+        clusterEnd = -1;
+    }
+
+    for (const item of items) {
+        if (cluster.length > 0 && item.start >= clusterEnd) {
+            // новая задача не пересекается с кластером — закрываем его
+            flushCluster();
+        }
+        cluster.push(item);
+        clusterEnd = Math.max(clusterEnd, item.end);
+    }
+    flushCluster();
+
+    return items;
+}
+
 function renderWeekGrid() {
     const grid = document.getElementById("weekGrid");
     grid.innerHTML = "";
@@ -193,20 +278,28 @@ function renderWeekGrid() {
             && t.start_time && t.end_time
         );
 
-        for (const task of dayTasks) {
-            const [sh, sm] = task.start_time.split(":").map(Number);
-            const [eh, em] = task.end_time.split(":").map(Number);
-            const startMin = (sh - GRID_START) * 60 + sm;
-            const endMin = (eh - GRID_START) * 60 + em;
-            const maxMin = GRID_HOURS * 60;
-            if (endMin <= 0 || startMin >= maxMin) continue;
-            const top = Math.max(0, startMin);
-            const height = Math.max(22, Math.min(maxMin, endMin) - top);
+        // Считаем геометрию каждой задачи и раскладываем по колонкам
+        const maxMin = GRID_HOURS * 60;
+        const layout = computeDayLayout(dayTasks, maxMin);
+
+        for (const item of layout) {
+            const { task, top, height, colIndex, colCount } = item;
+
+            // Ширина и сдвиг по горизонтали в зависимости от числа колонок.
+            // Внутренние отступы колонки: 3px слева у первой, 3px справа у последней.
+            const gap = 3;          // зазор между соседними блоками
+            const edge = 3;         // отступ от краёв колонки дня
+            const usable = `(100% - ${edge * 2}px - ${gap * (colCount - 1)}px)`;
+            const width = `calc(${usable} / ${colCount})`;
+            const left = `calc(${edge}px + (${width} + ${gap}px) * ${colIndex})`;
 
             const block = document.createElement("div");
             block.className = `task-block priority-${task.priority}${task.done ? " done" : ""}`;
             block.style.top = top + "px";
             block.style.height = height + "px";
+            block.style.left = left;
+            block.style.width = width;
+            block.style.right = "auto";
             if (task.color) block.style.background = task.color;
 
             block.innerHTML = `
