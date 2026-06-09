@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"todo-calendar/auth"
 	"todo-calendar/models"
 )
 
@@ -34,7 +35,12 @@ type Handler struct {
 }
 
 func (h *Handler) GetTasks(w http.ResponseWriter, r *http.Request) {
-	rows, err := h.DB.Query(`SELECT id, title, description, priority, start_time, end_time, color, deadline, done, created_at FROM tasks`)
+	userID, ok := auth.UserIDFromContext(r.Context())
+	if !ok {
+		http.Error(w, "не авторизирован", http.StatusUnauthorized)
+		return
+	}
+	rows, err := h.DB.Query(`SELECT id, title, description, priority, start_time, end_time, color, deadline, done, created_at FROM tasks WHERE user_id = ?`, userID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -57,14 +63,20 @@ func (h *Handler) GetTasks(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) CreateTask(w http.ResponseWriter, r *http.Request) {
+	userID, ok := auth.UserIDFromContext(r.Context())
+	if !ok {
+		http.Error(w, "не авторизирован", http.StatusUnauthorized)
+		return
+	}
+
 	var req CreateTaskRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	_, err = h.DB.Exec(`INSERT INTO tasks (title, description, priority, start_time, end_time, color, deadline) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-		req.Title, req.Description, req.Priority, req.StartTime, req.EndTime, req.Color, req.Deadline)
+	_, err = h.DB.Exec(`INSERT INTO tasks (user_id, title, description, priority, start_time, end_time, color, deadline) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+		userID, req.Title, req.Description, req.Priority, req.StartTime, req.EndTime, req.Color, req.Deadline)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -73,6 +85,12 @@ func (h *Handler) CreateTask(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) UpdateTask(w http.ResponseWriter, r *http.Request) {
+	userID, ok := auth.UserIDFromContext(r.Context())
+	if !ok {
+		http.Error(w, "не авторизован", http.StatusUnauthorized)
+		return
+	}
+
 	id := r.PathValue("id")
 	taskID, err := strconv.Atoi(id)
 	if err != nil {
@@ -86,8 +104,8 @@ func (h *Handler) UpdateTask(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	_, err = h.DB.Exec(`UPDATE tasks SET title=?, description=?, priority=?, start_time=?, end_time=?, color=?, deadline=?, done=? WHERE id=?`,
-		req.Title, req.Description, req.Priority, req.StartTime, req.EndTime, req.Color, req.Deadline, req.Done, taskID)
+	_, err = h.DB.Exec(`UPDATE tasks SET title=?, description=?, priority=?, start_time=?, end_time=?, color=?, deadline=?, done=? WHERE id=? AND user_id=?`,
+		req.Title, req.Description, req.Priority, req.StartTime, req.EndTime, req.Color, req.Deadline, req.Done, taskID, userID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -96,13 +114,19 @@ func (h *Handler) UpdateTask(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) DeleteTask(w http.ResponseWriter, r *http.Request) {
+	userID, ok := auth.UserIDFromContext(r.Context())
+	if !ok {
+		http.Error(w, "не авторизован", http.StatusUnauthorized)
+		return
+	}
+
 	id := r.PathValue("id")
 	taskID, err := strconv.Atoi(id)
 	if err != nil {
 		http.Error(w, "неверный номер задачи", http.StatusBadRequest)
 		return
 	}
-	_, err = h.DB.Exec(`DELETE FROM tasks WHERE id =?`, taskID)
+	_, err = h.DB.Exec(`DELETE FROM tasks WHERE id =? AND user_id=?`, taskID, userID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
