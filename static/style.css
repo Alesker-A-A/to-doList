@@ -729,3 +729,87 @@ button { font: inherit; }
  .time-grid::-webkit-scrollbar {
     width: 15px;
 }
+/* ---------- Палитра цветов ---------- */
+.color-palette {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 4px 0;
+}
+
+.color-swatch {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.12s, border-color 0.12s;
+    position: relative;
+}
+.color-swatch:hover {
+    transform: scale(1.12);
+}
+.color-swatch.selected {
+    border-color: var(--text);
+}
+/* Кружок "по умолчанию" — показываем диагональную линию */
+.color-swatch.is-default {
+    background: var(--surface);
+}
+.color-swatch.is-default::after {
+    content: "";
+    position: absolute;
+    inset: 4px;
+    background: linear-gradient(to top right,
+        transparent 45%, var(--text-faint) 45%, var(--text-faint) 55%, transparent 55%);
+}
+
+/* ---------- Фильтр по цвету ---------- */
+.color-filter-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.color-filter-swatch {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.12s, border-color 0.12s;
+    position: relative;
+}
+.color-filter-swatch:hover { transform: scale(1.12); }
+.color-filter-swatch.active { border-color: var(--text); }
+
+.color-filter-swatch.is-default {
+    background: var(--surface);
+}
+.color-filter-swatch.is-default::after {
+    content: "";
+    position: absolute;
+    inset: 4px;
+    background: linear-gradient(to top right,
+        transparent 45%, var(--text-faint) 45%, var(--text-faint) 55%, transparent 55%);
+}
+
+/* Кнопка "Все" в фильтре цвета */
+.color-filter-all {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px dashed var(--border-strong);
+    background: transparent;
+    cursor: pointer;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.12s, border-color 0.12s;
+}
+.color-filter-all:hover { transform: scale(1.12); }
+.color-filter-all.active { border-color: var(--text); border-style: solid; }

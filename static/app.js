@@ -14,12 +14,22 @@ const MONTH_GENITIVE = [
     "января", "февраля", "марта", "апреля", "мая", "июня",
     "июля", "августа", "сентября", "октября", "ноября", "декабря"
 ];
+const TASK_COLORS = [
+    { value: "",        label: "По умолчанию" },
+    { value: "#d9e4dc", label: "Зелёный" },
+    { value: "#cfe0ec", label: "Синий" },
+    { value: "#f0d9d2", label: "Терракот" },
+    { value: "#f0e4cf", label: "Охра" },
+    { value: "#e0d9ec", label: "Лиловый" },
+    { value: "#e2e0db", label: "Серый" },
+];
 
 // ============== Состояние ==============
 let allTasks = [];
 let weekStart = mondayOf(new Date());
 let miniMonth = new Date(weekStart);
 let currentFilter = "all";
+let currentColorFilter = "all";
 
 // ============== Хелперы дат ==============
 function mondayOf(date) {
@@ -81,7 +91,15 @@ async function deleteTask(id) {
 
 // ============== Фильтр ==============
 function passesFilter(t) {
-    return currentFilter === "all" || t.priority === Number(currentFilter);
+    // Фильтр по приоритету
+    const okPriority = currentFilter === "all" || t.priority === Number(currentFilter);
+
+    // Фильтр по цвету
+    const taskColor = t.color || "";   // пустой цвет = "по умолчанию"
+    const okColor = currentColorFilter === "all" || taskColor === currentColorFilter;
+
+    // Задача проходит, только если удовлетворяет ОБОИМ фильтрам
+    return okPriority && okColor;
 }
 
 // ============== Главная отрисовка ==============
@@ -423,9 +441,84 @@ function escapeHtml(str) {
 // ============== Модалка ==============
 let modalTaskId = null;
 let modalMode = "edit";
+let modalColor = "";
 
 const overlay   = document.getElementById("modalOverlay");
 const modalForm = document.getElementById("modalForm");
+
+function renderPalette() {
+    const palette = document.getElementById("colorPalette");
+    palette.innerHTML = "";
+
+    for (const color of TASK_COLORS) {
+        const swatch = document.createElement("button");
+        swatch.type = "button";
+        swatch.className = "color-swatch";
+        swatch.title = color.label;
+
+        if (color.value === "") {
+            swatch.classList.add("is-default");
+        } else {
+            swatch.style.background = color.value;
+        }
+
+        // Подсветка выбранного
+        if (color.value === modalColor) {
+            swatch.classList.add("selected");
+        }
+
+        swatch.addEventListener("click", () => {
+            modalColor = color.value;
+            renderPalette();   // перерисовать, чтобы обновить выделение
+        });
+
+        palette.appendChild(swatch);
+    }
+}
+
+// Рисует фильтр по цвету в сайдбаре.
+function renderColorFilter() {
+    const row = document.getElementById("colorFilterRow");
+    row.innerHTML = "";
+
+    // Кнопка "Все" — сбрасывает фильтр цвета
+    const allBtn = document.createElement("button");
+    allBtn.type = "button";
+    allBtn.className = "color-filter-all" + (currentColorFilter === "all" ? " active" : "");
+    allBtn.textContent = "Все";
+    allBtn.title = "Все цвета";
+    allBtn.addEventListener("click", () => {
+        currentColorFilter = "all";
+        renderColorFilter();
+        renderAll();
+    });
+    row.appendChild(allBtn);
+
+    // Кружки по цветам
+    for (const color of TASK_COLORS) {
+        const swatch = document.createElement("button");
+        swatch.type = "button";
+        swatch.className = "color-filter-swatch";
+        swatch.title = color.label;
+
+        if (color.value === "") {
+            swatch.classList.add("is-default");
+        } else {
+            swatch.style.background = color.value;
+        }
+        if (color.value === currentColorFilter) {
+            swatch.classList.add("active");
+        }
+
+        swatch.addEventListener("click", () => {
+            currentColorFilter = color.value;
+            renderColorFilter();
+            renderAll();
+        });
+
+        row.appendChild(swatch);
+    }
+}
 
 function openModal(task) {
     modalMode = "edit"; 
@@ -443,6 +536,8 @@ function openModal(task) {
     toggleBtn.textContent = task.done ? "Вернуть в работу" : "Выполнено";
     toggleBtn.classList.toggle("done-active", task.done);
 
+    modalColor = task.color || "";
+    renderPalette();
     overlay.classList.add("open");
     document.getElementById("modalTitleInput").focus();
 }
@@ -473,6 +568,8 @@ function openCreateModal(date, hour) {
     // В режиме создания кнопка "Выполнено" не нужна — прячем
     document.getElementById("modalToggleDone").style.display = "none";
 
+    modalColor = "";
+    renderPalette();
     overlay.classList.add("open");
     document.getElementById("modalTitleInput").focus();
 }
@@ -510,15 +607,14 @@ modalForm.addEventListener("submit", (e) => {
     if (!payload.title) return;   // без названия не сохраняем
 
     if (modalMode === "create") {
-        // Новая задача
-        createTask({ ...payload, color: "" });
+        createTask({ ...payload, color: modalColor });
     } else {
         // Редактирование существующей — сохраняем color и done как были
         const task = allTasks.find(t => t.id === modalTaskId);
         if (!task) return;
         updateTask(modalTaskId, {
             ...payload,
-            color: task.color,
+            color: modalColor,
             done:  task.done
         });
     }
@@ -607,4 +703,5 @@ function scrollToCurrentHour() {
 }
 
 // ============== Старт ==============
+renderColorFilter();
 loadTasks();

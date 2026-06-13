@@ -65,6 +65,12 @@
                     <button class="filter-btn" data-filter="1">Низкий</button>
                 </div>
             </section>
+
+            <!-- Фильтр по цвету -->
+            <section class="card">
+                <h3 class="card-title">Цвет</h3>
+                <div class="color-filter-row" id="colorFilterRow"></div>
+            </section>
         </aside>
 
         <main class="main">
@@ -100,6 +106,7 @@
                     <input type="time" id="modalStart" title="Начало">
                     <input type="time" id="modalEnd" title="Конец">
                 </div>
+                <div class="color-palette" id="colorPalette"></div>
                 <div class="modal-actions">
                     <button type="button" class="btn-danger" id="modalDelete">Удалить</button>
                     <div class="modal-actions-right">
