@@ -1,0 +1,109 @@
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    padding: 20px;
+}
+
+.auth-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lift);
+    width: 100%;
+    max-width: 380px;
+    padding: 32px;
+}
+
+.auth-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+.auth-brand .brand-name {
+    font-family: "Fraunces", Georgia, serif;
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+
+/* ---------- Табы ---------- */
+.auth-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 4px;
+    margin-bottom: 24px;
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 9px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+.auth-tab.active {
+    background: var(--surface);
+    color: var(--text);
+    font-weight: 500;
+    box-shadow: var(--shadow);
+}
+
+/* ---------- Форма ---------- */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.auth-form input {
+    font-family: inherit;
+    font-size: 0.9rem;
+    padding: 11px 13px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text);
+    width: 100%;
+}
+.auth-form input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: var(--surface);
+}
+
+.auth-form .btn-primary {
+    padding: 11px;
+    font-size: 0.9rem;
+    margin-top: 4px;
+}
+
+/* ---------- Ошибка ---------- */
+.auth-error {
+    color: var(--high);
+    font-size: 0.82rem;
+    min-height: 1em;
+    margin: -4px 0 0;
+}
+.auth-error:empty {
+    display: none;
+}
+
+/* ---------- Подсказка ---------- */
+.auth-hint {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-faint);
+    margin-top: 18px;
+    min-height: 1em;
+}

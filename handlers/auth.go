@@ -50,6 +50,7 @@ func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 
 	if len(req.Password) < 6 {
 		http.Error(w, "пароль должен быть не короче 6 символов", http.StatusBadRequest)
+		return
 	}
 
 	user, err := auth.CreateUser(h.DB, req.Username, req.Password)

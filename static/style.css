@@ -19,8 +19,8 @@
     --radius: 12px;
     --radius-sm: 8px;
     --radius-lg: 16px;
-    --hour-height: 60px;
-    --grid-hours: 14;
+    --hour-height: 80px;
+    --grid-hours: 24;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -85,7 +85,8 @@ button { font: inherit; }
 .layout {
     display: grid;
     grid-template-columns: 300px 1fr;
-    min-height: calc(100vh - 57px);
+    height: calc(100vh - 57px);
+    overflow: hidden;
 }
 
 .sidebar {
@@ -100,7 +101,7 @@ button { font: inherit; }
 
 .main {
     padding: 28px 32px;
-    overflow: auto;
+    overflow: hidden;
 }
 
 /* ---------- Cards ---------- */
@@ -344,6 +345,9 @@ button { font: inherit; }
     border-radius: var(--radius-lg);
     overflow: hidden;
     min-width: 760px;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 57px - 56px);
 }
 
 .day-header-row {
@@ -351,6 +355,7 @@ button { font: inherit; }
     grid-template-columns: 60px repeat(7, 1fr);
     border-bottom: 1px solid var(--border);
     background: var(--surface);
+    padding-right: 15px;
 }
 
 .day-header {
@@ -381,6 +386,7 @@ button { font: inherit; }
     grid-template-columns: 60px repeat(7, 1fr);
     background: var(--surface);
     border-bottom: 1px solid var(--border);
+    padding-right: 15px;
 }
 .allday-label {
     font-size: 0.65rem;
@@ -419,6 +425,7 @@ button { font: inherit; }
 .time-grid {
     display: grid;
     grid-template-columns: 60px repeat(7, 1fr);
+    overflow-y: auto;
 }
 
 .time-col {
@@ -432,7 +439,7 @@ button { font: inherit; }
     color: var(--text-muted);
     border-top: 1px solid var(--border);
 }
-.time-label:first-child { border-top: none; color: transparent; }
+.time-label:first-child { border-top: none; }
 
 .day-col {
     border-left: 1px solid var(--border);
@@ -693,4 +700,32 @@ button { font: inherit; }
     background: var(--accent-soft);
     color: var(--accent);
     border-color: var(--accent);
+}
+
+.navbar-user {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    padding: 0 4px 0 12px;
+    margin-left: 8px;
+    border-left: 1px solid var(--border);
+}
+ 
+.nav-logout {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.nav-logout:hover {
+    background: var(--surface-2);
+    color: var(--text);
+    border-color: var(--border-strong);
+}
+
+ .time-grid::-webkit-scrollbar {
+    width: 15px;
 }

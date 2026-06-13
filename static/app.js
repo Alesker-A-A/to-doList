@@ -1,7 +1,9 @@
 // ============== Константы ==============
 const API = "/tasks";
-const GRID_START = 8;
-const GRID_HOURS = 14;
+const GRID_START = 0;
+const GRID_HOURS = 24;
+const HOUR_HEIGHT = 80;   
+const MIN_PX = HOUR_HEIGHT / 60;
 
 const WEEKDAY_NAMES = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
 const MONTH_NAMES = [
@@ -268,7 +270,7 @@ function renderWeekGrid() {
         for (let h = 1; h < GRID_HOURS; h++) {
             const line = document.createElement("div");
             line.className = "hour-line";
-            line.style.top = (h * 60) + "px";
+            line.style.top = (h * HOUR_HEIGHT) + "px";
             col.appendChild(line);
         }
 
@@ -295,8 +297,8 @@ function renderWeekGrid() {
 
             const block = document.createElement("div");
             block.className = `task-block priority-${task.priority}${task.done ? " done" : ""}`;
-            block.style.top = top + "px";
-            block.style.height = height + "px";
+            block.style.top = (top * MIN_PX) + "px";
+            block.style.height = (height * MIN_PX) + "px";
             block.style.left = left;
             block.style.width = width;
             block.style.right = "auto";
@@ -320,6 +322,7 @@ function renderWeekGrid() {
         timeGrid.appendChild(col);
     }
     grid.appendChild(timeGrid);
+    scrollToCurrentHour();
 }
 
 function renderMiniCal() {
@@ -530,6 +533,19 @@ document.querySelectorAll(".filter-btn").forEach(btn => {
         renderAll();
     });
 });
+
+function scrollToCurrentHour() {
+    const timeGrid = document.querySelector(".time-grid");
+    if (!timeGrid) return;
+
+    const now = new Date();
+    const hour = now.getHours();
+
+    // Прокручиваем так, чтобы текущий час был ближе к верху,
+    // но с отступом в 1 час сверху для контекста.
+    const offset = Math.max(0, (hour - 1) * HOUR_HEIGHT);
+    timeGrid.scrollTop = offset;
+}
 
 // ============== Старт ==============
 loadTasks();

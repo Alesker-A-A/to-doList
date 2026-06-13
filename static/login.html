@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход — Task Calendar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div class="auth-page">
+        <div class="auth-card">
+            <div class="auth-brand">
+                <span class="brand-mark"></span>
+                <span class="brand-name">Task Calendar</span>
+            </div>
+
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tabLogin">Вход</button>
+                <button class="auth-tab" id="tabRegister">Регистрация</button>
+            </div>
+
+            <form class="auth-form" id="authForm">
+                <input type="text" id="username" placeholder="Имя пользователя" autocomplete="username" required>
+                <input type="password" id="password" placeholder="Пароль" autocomplete="current-password" required>
+
+                <p class="auth-error" id="authError"></p>
+
+                <button type="submit" class="btn-primary" id="submitBtn">Войти</button>
+            </form>
+
+            <p class="auth-hint" id="authHint"></p>
+        </div>
+    </div>
+
+    <script src="login.js"></script>
+</body>
+</html>
