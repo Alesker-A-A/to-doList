@@ -267,6 +267,20 @@ function renderWeekGrid() {
         col.className = "day-col";
         if (sameDay(date, today)) col.classList.add("today");
 
+        // Клик по пустому месту колонки — создать задачу на этот день и час
+        col.addEventListener("click", (e) => {
+            // Если кликнули по существующей задаче — не создаём новую.
+            // (у задач свой обработчик, но клик всплывает до колонки)
+            if (e.target.closest(".task-block")) return;
+
+            // Вычисляем час по вертикальной позиции клика внутри колонки
+            const rect = col.getBoundingClientRect();
+            const offsetY = e.clientY - rect.top;        // пиксели от верха колонки
+            const hour = Math.floor(offsetY / HOUR_HEIGHT) + GRID_START;
+
+            openCreateModal(date, hour);
+        });
+
         for (let h = 1; h < GRID_HOURS; h++) {
             const line = document.createElement("div");
             line.className = "hour-line";
@@ -408,13 +422,16 @@ function escapeHtml(str) {
 
 // ============== Модалка ==============
 let modalTaskId = null;
+let modalMode = "edit";
 
 const overlay   = document.getElementById("modalOverlay");
 const modalForm = document.getElementById("modalForm");
 
 function openModal(task) {
+    modalMode = "edit"; 
     modalTaskId = task.id;
 
+    document.getElementById("modalToggleDone").style.display = "";
     document.getElementById("modalTitleInput").value = task.title || "";
     document.getElementById("modalDesc").value        = task.description || "";
     document.getElementById("modalDeadline").value    = task.deadline || "";
@@ -425,6 +442,36 @@ function openModal(task) {
     const toggleBtn = document.getElementById("modalToggleDone");
     toggleBtn.textContent = task.done ? "Вернуть в работу" : "Выполнено";
     toggleBtn.classList.toggle("done-active", task.done);
+
+    overlay.classList.add("open");
+    document.getElementById("modalTitleInput").focus();
+}
+
+function openCreateModal(date, hour) {
+    modalMode = "create";
+    modalTaskId = null;
+
+    // Пустые поля
+    document.getElementById("modalTitleInput").value = "";
+    document.getElementById("modalDesc").value = "";
+    document.getElementById("modalPriority").value = 2;
+
+    // Предзаполняем дату по клику
+    document.getElementById("modalDeadline").value = formatYMD(date);
+
+    // Если кликнули по часовой сетке — ставим время начала и конца (+1 час)
+    if (hour !== null) {
+        const startH = String(hour).padStart(2, "0");
+        const endH = String(Math.min(hour + 1, 23)).padStart(2, "0");
+        document.getElementById("modalStart").value = `${startH}:00`;
+        document.getElementById("modalEnd").value = `${endH}:00`;
+    } else {
+        document.getElementById("modalStart").value = "";
+        document.getElementById("modalEnd").value = "";
+    }
+
+    // В режиме создания кнопка "Выполнено" не нужна — прячем
+    document.getElementById("modalToggleDone").style.display = "none";
 
     overlay.classList.add("open");
     document.getElementById("modalTitleInput").focus();
@@ -449,21 +496,33 @@ document.addEventListener("keydown", (e) => {
 // Сохранить
 modalForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    if (modalTaskId === null) return;
 
-    const task = allTasks.find(t => t.id === modalTaskId);
-    if (!task) return;
-
-    updateTask(modalTaskId, {
+    // Собираем данные из формы — общие для обоих режимов
+    const payload = {
         title:       document.getElementById("modalTitleInput").value.trim(),
         description: document.getElementById("modalDesc").value.trim(),
         priority:    Number(document.getElementById("modalPriority").value),
         deadline:    document.getElementById("modalDeadline").value,
         start_time:  document.getElementById("modalStart").value,
         end_time:    document.getElementById("modalEnd").value,
-        color:       task.color,
-        done:        task.done
-    });
+    };
+
+    if (!payload.title) return;   // без названия не сохраняем
+
+    if (modalMode === "create") {
+        // Новая задача
+        createTask({ ...payload, color: "" });
+    } else {
+        // Редактирование существующей — сохраняем color и done как были
+        const task = allTasks.find(t => t.id === modalTaskId);
+        if (!task) return;
+        updateTask(modalTaskId, {
+            ...payload,
+            color: task.color,
+            done:  task.done
+        });
+    }
+
     closeModal();
 });
 
