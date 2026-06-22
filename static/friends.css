@@ -1,0 +1,152 @@
+/* ---------- Friends page ---------- */
+.friends-layout {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 32px 24px 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.friends-heading {
+    font-family: "Fraunces", Georgia, serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    margin-bottom: 4px;
+}
+
+.add-friend-row {
+    display: flex;
+    gap: 8px;
+}
+.add-friend-row input {
+    flex: 1;
+    font-family: inherit;
+    font-size: 0.875rem;
+    padding: 9px 11px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text);
+}
+.add-friend-row input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: var(--surface);
+}
+.add-friend-row .btn-primary {
+    margin-top: 0;
+    white-space: nowrap;
+}
+
+.form-message {
+    margin-top: 10px;
+    font-size: 0.82rem;
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+}
+.form-message.success { background: var(--accent-soft); color: var(--accent); }
+.form-message.error   { background: #f4e0dd; color: var(--high); }
+
+.count-badge {
+    color: var(--text-faint);
+    font-size: 0.8rem;
+    font-weight: 400;
+}
+
+.friend-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.friend-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+}
+
+.friend-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+
+.friend-name {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.friend-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.btn-sm {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.btn-sm:hover { background: var(--surface-2); border-color: var(--border-strong); }
+
+.btn-accept {
+    background: var(--accent);
+    color: var(--surface);
+    border-color: var(--accent);
+}
+.btn-accept:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+
+.btn-decline { color: var(--text-muted); }
+.btn-decline:hover { color: var(--high); border-color: var(--high); }
+
+/* ---------- Переключатель доступа ---------- */
+.access-toggle {
+    display: flex;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.access-btn {
+    font-size: 0.78rem;
+    padding: 5px 10px;
+    border: none;
+    border-left: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+.access-btn:first-child { border-left: none; }
+.access-btn:hover { background: var(--surface-2); color: var(--text); }
+.access-btn.active {
+    background: var(--accent);
+    color: var(--surface);
+}
+
+.hidden { display: none; }

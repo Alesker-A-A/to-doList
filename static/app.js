@@ -427,7 +427,8 @@ function toggleDone(task) {
         end_time: task.end_time,
         color: task.color,
         deadline: task.deadline,
-        done: !task.done
+        done: !task.done,
+        is_private: task.is_private
     });
 }
 
@@ -531,6 +532,7 @@ function openModal(task) {
     document.getElementById("modalPriority").value    = task.priority || 2;
     document.getElementById("modalStart").value       = task.start_time || "";
     document.getElementById("modalEnd").value         = task.end_time || "";
+    document.getElementById("modalPrivate").checked = !!task.is_private;
 
     const toggleBtn = document.getElementById("modalToggleDone");
     toggleBtn.textContent = task.done ? "Вернуть в работу" : "Выполнено";
@@ -550,6 +552,7 @@ function openCreateModal(date, hour) {
     document.getElementById("modalTitleInput").value = "";
     document.getElementById("modalDesc").value = "";
     document.getElementById("modalPriority").value = 2;
+    document.getElementById("modalPrivate").checked = false;
 
     // Предзаполняем дату по клику
     document.getElementById("modalDeadline").value = formatYMD(date);
@@ -602,6 +605,7 @@ modalForm.addEventListener("submit", (e) => {
         deadline:    document.getElementById("modalDeadline").value,
         start_time:  document.getElementById("modalStart").value,
         end_time:    document.getElementById("modalEnd").value,
+        is_private:  document.getElementById("modalPrivate").checked,
     };
 
     if (!payload.title) return;   // без названия не сохраняем

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Друзья — Task Calendar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="friends.css">
+    <script src="auth-guard.js"></script>
+</head>
+<body>
+    <div class="friends-layout">
+        <h1 class="friends-heading">Друзья</h1>
+
+        <div class="card friends-card">
+            <div class="card-title">Добавить друга</div>
+            <div class="add-friend-row">
+                <input type="text" id="addUsername" placeholder="Имя пользователя" autocomplete="off">
+                <button class="btn-primary" id="addBtn">Отправить заявку</button>
+            </div>
+            <div class="form-message hidden" id="addMessage"></div>
+        </div>
+
+        <div class="card friends-card">
+            <div class="card-title">Входящие заявки <span class="count-badge" id="requestsCount"></span></div>
+            <div class="friend-list" id="requestsList"></div>
+            <div class="empty hidden" id="requestsEmpty">Нет входящих заявок</div>
+        </div>
+
+        <div class="card friends-card">
+            <div class="card-title">Мои друзья <span class="count-badge" id="friendsCount"></span></div>
+            <div class="friend-list" id="friendsList"></div>
+            <div class="empty hidden" id="friendsEmpty">Пока нет друзей</div>
+        </div>
+    </div>
+
+    <script src="navbar.js"></script>
+    <script src="friends.js"></script>
+</body>
+</html>

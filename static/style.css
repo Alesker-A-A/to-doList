@@ -813,3 +813,22 @@ button { font: inherit; }
 }
 .color-filter-all:hover { transform: scale(1.12); }
 .color-filter-all.active { border-color: var(--text); border-style: solid; }
+
+.modal-private {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    column-gap: 8px;
+    width: 100%;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px 0;
+}
+.modal-private input {
+    cursor: pointer;
+    margin: 0;
+}
+.modal-private span {
+    text-align: left;
+}

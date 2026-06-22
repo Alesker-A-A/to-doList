@@ -12,4 +12,5 @@ type Task struct {
 	Deadline    string `json:"deadline"`
 	Done        bool   `json:"done"`
 	CreatedAt   string `json:"created_at"`
+	IsPrivate   bool   `json:"is_private"`
 }

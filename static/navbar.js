@@ -2,10 +2,12 @@
   // Определяем активную страницу по pathname
   const path = window.location.pathname;
 
-  function isActive(href) {
+function isActive(href) {
     if (href === "/app" && path === "/app") return true;
     if (href === "/stats" && path === "/stats") return true;
     if (href === "/archive" && path === "/archive") return true;
+    if (href === "/friends" && path === "/friends") return true;
+    if (href === "/shared" && path === "/shared") return true;
     return false;
   }
 
@@ -23,6 +25,8 @@
       <a href="/app"     class="nav-link ${isActive("/app")     ? "active" : ""}">Календарь</a>
       <a href="/stats"   class="nav-link ${isActive("/stats")   ? "active" : ""}">Статистика</a>
       <a href="/archive" class="nav-link ${isActive("/archive") ? "active" : ""}">Архив</a>
+      <a href="/friends" class="nav-link ${isActive("/friends") ? "active" : ""}">Друзья</a>
+      <a href="/shared" class="nav-link ${isActive("/shared") ? "active" : ""}">Общие</a>
       <span class="navbar-user" id="navbarUser"></span>
       <button class="nav-logout" id="logoutBtn">Выход</button>
     </nav>

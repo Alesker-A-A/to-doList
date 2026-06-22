@@ -1,0 +1,89 @@
+/* ---------- Shared calendars page ---------- */
+.shared-layout {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 32px 24px 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.shared-heading {
+    font-family: "Fraunces", Georgia, serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    margin-bottom: 4px;
+}
+
+.shared-people {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.shared-person {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    text-align: left;
+    width: 100%;
+    font: inherit;
+    color: var(--text);
+}
+.shared-person:hover { border-color: var(--border-strong); background: var(--surface-2); }
+.shared-person.active { border-color: var(--accent); background: var(--accent-soft); }
+
+.shared-avatar {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem; font-weight: 600;
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+.shared-person.active .shared-avatar { background: var(--surface); }
+
+.shared-person-name { flex: 1; font-size: 0.9rem; }
+
+.level-tag {
+    font-size: 0.72rem;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: var(--surface-2);
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+/* Список задач в просмотрщике */
+.shared-task {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-left: 3px solid var(--border-strong);
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    margin-bottom: 6px;
+    font-size: 0.875rem;
+}
+.shared-task.priority-1 { border-left-color: var(--low); }
+.shared-task.priority-2 { border-left-color: var(--medium); }
+.shared-task.priority-3 { border-left-color: var(--high); }
+.shared-task.done { opacity: 0.55; }
+.shared-task.done .shared-task-title { text-decoration: line-through; }
+
+.shared-task-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.shared-task-meta { color: var(--text-muted); font-size: 0.78rem; flex-shrink: 0; }
+
+.shared-task.busy .shared-task-title { color: var(--text-muted); font-style: italic; }
+
+.hidden { display: none; }
